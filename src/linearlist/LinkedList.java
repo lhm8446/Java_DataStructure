@@ -1,3 +1,4 @@
+package linearlist;
 public class LinkedList {
 
 	private Node head;
