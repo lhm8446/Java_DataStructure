@@ -1,14 +1,14 @@
 package queue;
 
-public class ArrayQueue implements Queue {
+public class CircleQueue implements Queue {
 	private int front;
 	private int rear;
 	private int queueSize;
 	private char itemArray[];
 	
-	public ArrayQueue(int queueSize){
-		this.front= -1;
-		this.rear = -1;
+	public CircleQueue(int queueSize){
+		this.front= 0;
+		this.rear = 0;
 		this.queueSize=queueSize;
 		this.itemArray=new char[this.queueSize];
 	}
@@ -24,22 +24,18 @@ public class ArrayQueue implements Queue {
 	}
 	
 	public boolean isFull(){
-		if(rear==this.queueSize-1){
-			return true;
-		}
-		else{
-			return false;
-		}
+		return (((rear+1)%this.queueSize)==front);
+	
 	}
 
 	@Override
 	public void enQueue(char item) {
 		if(isFull()){
 			System.out.println("입력할 공간이 없습니다.");
-			return;
 		}
 		else{
-			itemArray[++rear]=item;
+			rear=(rear+1)%this.queueSize;
+			itemArray[rear]=item;
 		}
 	}
 
@@ -50,7 +46,8 @@ public class ArrayQueue implements Queue {
 			return 0;
 		}
 		else{
-			return itemArray[++front];
+			front = (front+1) % this.queueSize;
+			return itemArray[front];
 		}
 	}
 
@@ -61,7 +58,7 @@ public class ArrayQueue implements Queue {
 			return ;
 		}
 		else{
-			++front;
+			front = (front+1) % this.queueSize;
 		}
 	}
 
@@ -72,7 +69,8 @@ public class ArrayQueue implements Queue {
 			return ;
 		}
 		else{
-			System.out.println("첫번째 원소 : " + itemArray[++front]); 
+			front = (front+1) % this.queueSize;
+			System.out.println("첫번째 원소 : " + itemArray[front]); 
 		}
 	}
 	
@@ -83,7 +81,9 @@ public class ArrayQueue implements Queue {
 		}
 		else{
 			System.out.print("Queue >> ");
-			for(int i=front+1;i<=rear;i++){
+			for(int i=(front+1)%this.queueSize;
+					i!=(rear+1)%this.queueSize;
+					i=++i%this.queueSize){
 				System.out.print(itemArray[i] +"\t");
 			}
 			System.out.println("");
@@ -91,30 +91,33 @@ public class ArrayQueue implements Queue {
 	}
 
 	public static void main(String[] args) {
-		ArrayQueue q = new ArrayQueue(4);
+		CircleQueue c = new CircleQueue(4);
 		
-		q.enQueue('A');
-		q.printQueue();
+		c.enQueue('A');
+		c.printQueue();
 		
-		q.enQueue('B');
-		q.printQueue();
+		c.enQueue('B');
+		c.printQueue();
 		
-		q.enQueue('C');
-		q.printQueue();
+		c.enQueue('C');
+		c.printQueue();
 		
-		q.enQueue('C');
-		q.printQueue();
-		char deleteItem = q.deQueue();
-		System.out.println("삭제할 원소 : " + deleteItem);
-		q.printQueue();
+		c.enQueue('D');
+		c.printQueue();
 		
-		deleteItem = q.deQueue();
-		System.out.println("삭제할 원소 : " + deleteItem);
-		q.printQueue();
 		
-		deleteItem = q.deQueue();
-		System.out.println("삭제할 원소 : " + deleteItem);
-		q.printQueue();
+//		char deleteItem = c.deQueue();
+//		System.out.println(deleteItem);
+//		c.printQueue();
+//		
+//		c.enQueue('C');
+//		c.printQueue();
+//		
+//		c.enQueue('D');
+//		c.printQueue();
+//		
+//		c.enQueue('E');
+//		c.printQueue();
 
 	}
 
